@@ -1,6 +1,6 @@
 [submodule "brickseekr-back"]
 	path = brickseekr-back
-	url = git@elwest:AndyKach/brickseekr-back.git
+	url = git@github.com:AndyKach/brickseekr-back.git
 [submodule "brickseekr-web"]
 	path = brickseekr-web
-	url = git@elwest:AndyKach/brickseekr-web.git
+	url = git@github.com:AndyKach/brickseekr-web.git
