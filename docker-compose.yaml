@@ -9,7 +9,7 @@ services:
       - "http"
       - "--domain"
       - "ibex-glorious-muskrat.ngrok-free.app"
-      - "backend:8080"
+      - "frontend:80"
       - "--log=stdout"
     volumes:
       - ./ngrok.yml:/etc/ngrok.yml
@@ -24,6 +24,8 @@ services:
   backend:
     image: brickseekr_backend:latest
     container_name: brickseekr_backend
+    build:
+      context: ./brickseekr-back
     working_dir: /src
     env_file:
       - brickseekr-back/.env
@@ -37,102 +39,25 @@ services:
       - "--port"
       - "8080"
       - "--reload"
-    depends_on:
-      - ngrok
-
     ports:
       - "8080:8080"
     networks:
-      uni_helper_network:
+      brickseekr_network:
         ipv4_address: 172.18.0.2
 
   frontend:
     image: brickseekr_frontend:latest
     container_name: brickseekr_frontend
-    working_dir: /src
-    env_file:
-      - hessen-mensen-parsers/.env
-    command:
-      - "uvicorn"
+    build:
+      context: ./brickseekr-web
+    working_dir: /app
     ports:
-      - "4173:4173"
+      - "80:80"
+    depends_on:
+      - ngrok
     networks:
-      uni_helper_network:
+      brickseekr_network:
         ipv4_address: 172.18.0.3
-
-  stadburo_service:
-    image: uni_helper_stadburo:latest
-    container_name: stadburo_service
-    working_dir: /src
-    env_file:
-      - marburg-stadburo-parser/.env
-    command:
-      - "uvicorn"
-      - "main:app"
-      - "--host"
-      - "172.18.0.4"
-      - "--port"
-      - "8002"
-      - "--reload"
-    depends_on:
-      - redis
-      - ngrok
-    ports:
-      - "8002:8002"
-    networks:
-      uni_helper_network:
-        ipv4_address: 172.18.0.4
-
-  users_service:
-    image: uni_helper_users:latest
-    container_name: users_service
-    working_dir: /src
-    env_file:
-      - uni-helper-users-service/.env
-    command:
-      - "uvicorn"
-      - "main:app"
-      - "--host"
-      - "172.18.0.5"
-      - "--port"
-      - "8003"
-      - "--reload"
-    depends_on:
-      - redis
-      - ngrok
-    ports:
-      - "8003:8003"
-    networks:
-      uni_helper_network:
-        ipv4_address: 172.18.0.5
-
-  notification_service:
-    image: uni_helper_notification:latest
-    container_name: notification_service
-    working_dir: /src
-    env_file:
-      uni-helper-notification-service/.env
-    environment:
-      CORE_ADDRESS: http://core_service:8080
-      USERS_ADDRESS: http://users_service:8003
-    command:
-      - "uvicorn"
-      - "main:app"
-      - "--host"
-      - "172.18.0.6"
-      - "--port"
-      - "8004"
-      - "--reload"
-    depends_on:
-      - redis
-      - ngrok
-    ports:
-      - "8004:8004"
-    networks:
-      uni_helper_network:
-        ipv4_address: 172.18.0.6
-
-
 
 networks:
   brickseekr_network:
