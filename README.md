@@ -30,3 +30,10 @@ The project was developed as a proof-of-concept (PoC) within a master’s thesis
 ### Infrastructure
 - Docker / Docker Compose
 - Local development via Node.js and npm
+
+
+<img width="800" height="450" alt="ezgif-36a940dc3730ec57" src="https://github.com/user-attachments/assets/8bce63f4-ee6f-46e8-999a-de8bc6f8f954" />
+
+
+
+
